@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import TodoItem from './TodoItem';
-
+import { addTodo } from '../functions/addTodo';
 const TodoList = () => {
-    const [todos, setTodos] = useState([]);
-    const [input, setInput] = useState('');
-
-
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState('');
+  const handleAddTodo = () => {
+    const newTodo = { text: input };
+    setTodos(addTodo(todos, newTodo));
+    setInput('')
+    };
     useEffect(() => {
         const fetchTodos = async () => {
             try {
@@ -17,12 +20,12 @@ const TodoList = () => {
                 console.error('Error fetching todos:', error);
             }
         };
-
         fetchTodos();
     }, []);
-
     return (
         <div>
+            <input value={input} onChange={(e) => setInput(e.target.value)} />
+            <button onClick={handleAddTodo}>Add Todo</button>
             <ul>
                 {todos.map((todo, index) => (
                     <TodoItem key={index} todo={todo} />
@@ -31,5 +34,4 @@ const TodoList = () => {
         </div>
     );
 };
-
 export default TodoList;
